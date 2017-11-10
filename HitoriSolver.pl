@@ -1,7 +1,8 @@
 outputFile('./hitori_solved.txt').
 inputFile('./hitori_unsolved.txt').
 
-:- include('HitoriRules.pl').
+%:- include('HitoriRules.pl').
+:- include('Sudoku.pl').
 
 /********************* dummy solution algorithms -> fill your correct algorithm here */
 /* doSolve(SizeX,SizeY,Input,Output) */
