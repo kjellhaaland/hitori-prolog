@@ -1,9 +1,8 @@
 outputFile('./hitori_solved.txt').
 inputFile('./hitori_unsolved.txt').
 
-%:- include('HitoriRules.pl').
-:- include('Phase3.pl').
-:- include('Phase1.pl').
+:- include('Solver.pl').
+
 /********************* dummy solution algorithms -> fill your correct algorithm here */
 /* doSolve(SizeX,SizeY,Input,Output) */
 doSolve(5,_,_,[[1,'X',3,'X',5],[4,1,5,3,2],[2,'X',1,'X',3],[5,3,'X',1,4],[3,'X',4,5,'X']]):-!.
@@ -45,7 +44,7 @@ run:- inputFile(IF), see(IF), outputFile(F), tell(F), readInt(N), write(N), nl, 
 run:- told, seen. /* close the files */
 
 solveProblems(0).
-solveProblems(N):- N>0, readProblem(X, Y, I), doSolve(X, Y, I, S), writeFullOutput(S, X, Y), !, N1 is N-1, solveProblems(N1).
+solveProblems(N):- N>0, readProblem(X, Y, I), solveMatrix(X, Y, I, S), writeFullOutput(S, X, Y), !, N1 is N-1, solveProblems(N1).
 
 :- nl,nl,write(' try running "?- run."'), nl,nl,nl.
 :- run.
