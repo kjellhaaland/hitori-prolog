@@ -2,8 +2,8 @@ outputFile('./hitori_solved.txt').
 inputFile('./hitori_unsolved.txt').
 
 %:- include('HitoriRules.pl').
-:- include('Sudoku.pl').
-
+:- include('Phase3.pl').
+:- include('Phase1.pl').
 /********************* dummy solution algorithms -> fill your correct algorithm here */
 /* doSolve(SizeX,SizeY,Input,Output) */
 doSolve(5,_,_,[[1,'X',3,'X',5],[4,1,5,3,2],[2,'X',1,'X',3],[5,3,'X',1,4],[3,'X',4,5,'X']]):-!.

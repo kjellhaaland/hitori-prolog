@@ -1,9 +1,9 @@
 :- use_module(library(clpfd)).
 
 
-hitori(Rows, Result, Size) :-
+phase3(Rows, Result, Size) :-
     append(Result, L),
-    L ins (1..Size \/ 999 \/ 9999),
+    L ins (0..Size),
     equality(Rows,Result),
     rule1(Result),
     rule2(Result),
@@ -17,8 +17,8 @@ rule1Check([H|T]) :- checkLine2(H), rule1Check(T).
 
 checkLine2(L) :- checkLine2(L,L).
 checkLine2(_,[]).
-checkLine2(L, [H|T]) :- (H = 999 ; H = 9999), checkLine2(L,T).
-checkLine2(L, [H|T]) :- H \= 999, H \= 9999, count(L,H,R), R=1, checkLine2(L,T).
+checkLine2(L, [H|T]) :- H = 0, checkLine2(L,T).
+checkLine2(L, [H|T]) :- H \= 0, count(L,H,R), R=1, checkLine2(L,T).
 
 
 
@@ -38,34 +38,31 @@ checkLine([]) :- true.
 checkLine([_]) :- true.
 checkLine([I1,I2|T]) :- checkLine([I2|T]), not(blackPair(I1,I2)). 
 
-blackPair(I1,I2) :- I1 == 999, I2 == 999.
+blackPair(I1,I2) :- I1 == 0, I2 == 0.
 
 
 
 % Rule 3 - All non-black cells must be connected
-
-
-
 
 % Equality rule
 equality([],[]).
 equality([H1|T1], [H2|T2]) :- eq(H1,H2), equality(T1,T2).
 
 eq([],[]).
-eq([H1|T1], [H2|T2]) :- (H1=H2  ; H2=999 ; H2=9999), eq(T1,T2).
+eq([H1|T1], [H2|T2]) :- (H1=H2  ; H2=0 ), eq(T1,T2).
 
 
 
 % Problem solving things...
-solvedProblem([[999,2,5,4,3],[4,5,999,1,999],[1,999,3,999,4],[3,4,1,2,5],[999,1,4,999,2]]).
+solvedProblem([[0,2,5,4,3],[4,5,0,1,0],[1,0,3,0,4],[3,4,1,2,5],[0,1,4,0,2]]).
 hProblem([[1,2,5,4,3],[4,5,4,1,1],[1,1,3,1,4],[3,4,1,2,5],[3,1,4,1,2]]).
-blank([[999,2,5,4,3],[_,_,_,_,_],[_,_,_,_,_],[_,_,_,_,_],[_,_,_,_,_]]).
+blank([[_,_,_,_,_],[4,5,_,1,_],[_,_,3,_,_],[3,4,_,2,_],[_,_,4,_,_]]).
 
 solve_problems :-
     statistics(runtime, _),
     hProblem(Rows),
     blank(Blank),
-    hitori(Rows,Blank,5),  
+    phase3(Rows,Blank,5),  
     maplist(writeln, Blank),
     statistics(runtime, [_,T]),
     write('CPU time = '), write(T), write(' msec'), nl, nl, true. 
