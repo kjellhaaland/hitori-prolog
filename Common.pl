@@ -18,3 +18,8 @@ eq([H1|T1], [H2|T2]) :- (H1=H2  ; H2=0 ), eq(T1,T2).
 count([],_,0).
 count([X|T],X,Y):- count(T,X,Z), Y is 1+Z.
 count([X1|T],X,Z):- X1\=X,count(T,X,Z).
+
+
+rotateMatrix(M, Rotated) :-
+    transpose(M, X),
+    maplist(reverse, X, Rotated).
