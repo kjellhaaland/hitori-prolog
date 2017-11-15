@@ -14,7 +14,7 @@ rule1Check([]).
 rule1Check([H|T]) :- checkLine2(H), rule1Check(T).
 
 checkLine2(L) :- checkLine2(L,L).
-checkLine2(_,[]) :- !.
+checkLine2(_,[]).
 checkLine2(L, [H|T]) :- H = 0, checkLine2(L,T).
 checkLine2(L, [H|T]) :- H \= 0, count(L,H,R), R=1, checkLine2(L,T).
 
@@ -33,11 +33,52 @@ blackPair(I1,I2) :- I1 == 0, I2 == 0.
 
 
 
-
 % Alternative solution?
+
+/*
+  def phase3(board: HBoard): HBoard =
+  {
+
+    var b = board
+    var backup = b
+
+
+    val dup = b.items.filter(i => i.state == "U")
+
+    for (i <- dup)
+    {
+      b = setCellBlack(b, i.x, i.y)
+      b = standardCycle(b)
+      b = phase2(b)
+      b = phase3(b)
+
+      if (isSolved(b))
+        return b
+
+      val rule_1 = rule1(b)
+      val rule_3 = rule3(b)
+
+      if (!rule_1 || !rule_3)
+      {
+        b = backup
+        b = setCellWhite(b, i.x, i.y)
+        backup = b
+      } else
+      {
+        b = backup
+      }
+
+    }
+
+    return b
+
+  }
+*/
+
+% SPM: Gjøre dette på en annen måte?
+
+
 solve()
-
-
 rule3(M,B) :- flatten(M, Flat), flatten(B, FlatBase), testBlacks(M,B).
 
 testBlacks([E1,E2|T],[A1,A2|B]) :- E1=0, E2=A2, testBlacks([E2|T],[A2|B]).
