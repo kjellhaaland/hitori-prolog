@@ -14,7 +14,7 @@ rule1Check([]).
 rule1Check([H|T]) :- checkLine2(H), rule1Check(T).
 
 checkLine2(L) :- checkLine2(L,L).
-checkLine2(_,[]).
+checkLine2(_,[]) :- !.
 checkLine2(L, [H|T]) :- H = 0, checkLine2(L,T).
 checkLine2(L, [H|T]) :- H \= 0, count(L,H,R), R=1, checkLine2(L,T).
 
@@ -31,19 +31,18 @@ checkLine([I1,I2|T]) :- checkLine([I2|T]), not(blackPair(I1,I2)).
 
 blackPair(I1,I2) :- I1 == 0, I2 == 0.
 
-% Problem solving things...
-solvedProblem([[0,2,5,4,3],[4,5,0,1,0],[1,0,3,0,4],[3,4,1,2,5],[0,1,4,0,2]]).
-hProblem([[1,2,5,4,3],[4,5,4,1,1],[1,1,3,1,4],[3,4,1,2,5],[3,1,4,1,2]]).
-blank([[_,_,_,_,_],[_,_,_,_,_],[_,_,_,_,_],[_,_,_,_,_],[_,_,_,_,_]]).
 
 
-/*
-solve_problems :-
-    statistics(runtime, _),
-    hProblem(Rows),
-    blank(Blank),
-    phase3(Rows,Blank,5),  
-    maplist(writeln, Blank),
-    statistics(runtime, [_,T]),
-    write('CPU time = '), write(T), write(' msec'), nl, nl, true. 
-*/
+
+% Alternative solution?
+solve()
+
+
+rule3(M,B) :- flatten(M, Flat), flatten(B, FlatBase), testBlacks(M,B).
+
+testBlacks([E1,E2|T],[A1,A2|B]) :- E1=0, E2=A2, testBlacks([E2|T],[A2|B]).
+testBlacks([E1,E2|T],[A1,A2|B]) :- E2=0, E1=A1, testBlacks([E2|T],[A2|B]).
+
+% row(B,I,R) :- nth1(I, B, R).
+
+% col(B,I,C) :- transpose(B, T), row(T,I,C).

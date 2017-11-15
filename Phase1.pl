@@ -1,7 +1,6 @@
 
 
 phase1(Rows, Result, Size) :-
-    equalityph1(Row, Result),
     patternSandwich(Rows, Result), 
     patternDoubleCorner(Rows,Result).
 
@@ -22,49 +21,26 @@ extractLineP1([],[]).
 extractLineP1([H|T],[A|B]) :- checkLineP1(H,A), extractLineP1(T,B).
 
 checkLineP1([_,_],[_,_]).
-checkLineP1([E1,E2,E1|T], [A1,E2,A3|B]) :- checkLineP1([E2,E3|T],[A2,A3|B]).
+checkLineP1([E1,E2,E1|T], [_,E2,A3|B]) :- checkLineP1([E2,_|T],[_,A3|B]).
 checkLineP1([E1,E1,E1|T], [0,E1,0|B]) :- checkLineP1([E2,E3|T],[A2,A3|B]).
 checkLineP1([E1,E2,E3|T], [A1,A2,A3|B]) :- (E1\=E3; E1\=E2 ; E1\=E3), checkLineP1([E2,E3|T],[A2,A3|B]).
 
 
-
-
+% Pattern double corner
 patternDoubleCorner(M, S) :- 
-    doSomething(M,S),
-    rotateMatrix(M, M1), rotateMatrix(S,S1), doSomething(M1,S1),
-    rotateMatrix(M1, M2), rotateMatrix(S1,S2), doSomething(M2,S2),
-    rotateMatrix(M2, M3), rotateMatrix(S2,S3), doSomething(M3,S3).
+    rotateMatrix(M, M1), rotateMatrix(S,S1), patternDC(M1,S1),
+    rotateMatrix(M1, M2), rotateMatrix(S1,S2), patternDC(M2,S2),
+    rotateMatrix(M2, M3), rotateMatrix(S2,S3), patternDC(M3,S3),
+    rotateMatrix(M3, M4), rotateMatrix(S3,S4), patternDC(M4,S4).
 
-doSomething([E1,E2|T], [A1,A2|B]) :- top(E1,E2,A1,A2).
+patternDC([E1,E2|T], [A1,A2|B]) :- checkDC(E1,E2,A1,A2).
 
-/*
-top([E1,E2|_], [E3,E4|_], [A1,A2|_], [A3,A4|_]) :- E1=E2, A3=E3.
-top([E1,E2|_], [E3,E4|_], [A1,A2|_], [A3,A4|_]) :- E1=E3, A2=E2.
-top([E1,E2|_], [E3,E4|_], [A1,A2|_], [A3,A4|_]) :- E3=E4, A2=E2.
-top([E1,E2|_], [E3,E4|_], [A1,A2|_], [A3,A4|_]) :- E2=E4, A3=E3.
-top([E1,E2|_], [E3,E4|_], [A1,A2|_], [A3,A4|_]) :- E1\=E2, E1\=E3, E3\=E4, E2\=E4.
-*/
+checkDC([E1,E1|_], [E3,E4|_], [A1,A2|_], [E3,A4|_]).
+checkDC([E1,E2|_], [E1,E4|_], [A1,E2|_], [A3,A4|_]).
+checkDC([E1,E2|_], [E3,E3|_], [A1,E2|_], [A3,A4|_]).
+checkDC([E1,E2|_], [E3,E2|_], [A1,A2|_], [E3,A4|_]).
+checkDC([E1,E2|_], [E3,E4|_], [A1,A2|_], [A3,A4|_]) :- E1\=E2, E1\=E3, E3\=E4, E2\=E4.
 
-top([E1,E1|_], [E3,E4|_], [A1,A2|_], [E3,A4|_]).
-top([E1,E2|_], [E1,E4|_], [A1,E2|_], [A3,A4|_]).
-top([E1,E2|_], [E3,E3|_], [A1,E2|_], [A3,A4|_]).
-top([E1,E2|_], [E3,E2|_], [A1,A2|_], [E3,A4|_]).
-top([E1,E2|_], [E3,E4|_], [A1,A2|_], [A3,A4|_]) :- E1\=E2, E1\=E3, E3\=E4, E2\=E4.
-
-/*
-extractLineP2(M,A) :- extractLineP2(M,A,1).
-extractLineP2([_],[_],_).
-extractLineP2([R1,R2|_],[A1,A2|_],I) :- I2 is I+1, extractLineP2(T,B, I2).
-extractLineP2([R1,R2|T],[A1,A2|B],I) :- I=1, checkLineP2(R1,R2,A1,A2), I2 is I+1, extractLineP2(T,B, I2).
-extractLineP2([R1,R2|T],[A1,A2|B],I) :- I>1, checkLineP2(R1,R2,A1,A2), I2 is I+1, extractLineP2(T,B, I2).
-
-checkLineP2(R1,R2,A1,A2) :- checkLineP2(R1,R2,A1,A2,1).
-checkLineP2([_,_],[_,_],[_,_],[_,_]).
-checkLineP2([E1,E1|T1], [E3,E4|T2], [A1,A2|B1], [E3,A4|B1], I) :- I=1, I2 is I+1, checkLineP2(T1,T2,B1,B2,I2).
-checkLineP2([E1,E2|T1], [E3,E4|T2], [A1,A2|B1], [A3,A4|B1], I) :- I=1, E1\=E2, I2 is I+1, checkLineP2(T1,T2,B1,B2,I2).
-checkLineP2([E1,E2|T1], [E3,E4|T2], [A1,A2|B1], [A3,A4|B1], I) :- I2 is I+1, checkLineP2(T1,T2,B1,B2,I2).
-checkLineP2([E1,E2|_], [E3,E3|_], [E1,A2|_], [A3,A4|_], I) :- I2 is I+1, checkLineP2(T1,T2,B1,B2,I2).
-*/
 
 
 % Problem solving things...
