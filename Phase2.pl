@@ -48,8 +48,6 @@ blackPair(I1,I2) :- I1 == 0, I2 == 0.
     for (i <- dup)
     {
       b = setCellBlack(b, i.x, i.y)
-      b = standardCycle(b)
-      b = phase2(b)
       b = phase3(b)
 
       if (isSolved(b))
