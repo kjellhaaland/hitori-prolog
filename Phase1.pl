@@ -5,39 +5,41 @@ phase1(Rows, Result, Size) :-
     patternQuadCorner(Rows,Result),
     patternTripleCorner(Rows, Result),
     patternDoubleCorner(Rows, Result),
+    patternStandardCycle(Rows, Result), 
+    patternStandardCycle(Rows, Result), 
+    patternStandardCycle(Rows, Result), 
+    patternStandardCycle(Rows, Result), 
     patternStandardCycle(Rows, Result).
 
 
 
-patternStandardCycle(M, EM) :- patternSCWhite(M, EM), transpose(M,T), transpose(EM,TEM), patternSCWhite(T,TEM).   
+patternStandardCycle(M, EM) :- 
+    patternSCWhite(M, EM),
+    patternSCBlack(M,EM), 
+    transpose(M,T), transpose(EM,TEM), 
+    patternSCWhite(T,TEM),
+    patternSCBlack(T,TEM)
+    .   
 
 patternSCWhite([],[]).
-patternSCWhite([E1|T],[A1|B]) :- checkSCWhite(E1,A1,E1,A1), patternSCWhite(T,B).
+patternSCWhite([E1|T],[A1|B]) :- checkSCWhite(E1,A1,E1,A1,0), patternSCWhite(T,B).
 
-checkSCWhite([],[],_,_).
-checkSCWhite([E1|T1], [A1|B1], Base1, Base2) :- integer(A1), searchSC(Base1,Base2,A1), checkSCWhite(T1,B1,Base1,Base2).
-checkSCWhite([E1|T1], [A1|B1], Base1, Base2) :- checkSCWhite(T1,B1,Base1,Base2).
+checkSCWhite([],[],_,_,_).
+checkSCWhite([E1|T1], [A1|B1], Base1, Base2, I) :- integer(A1), A1>0, searchSC(Base1,Base2,A1,I), I2 is I+1, checkSCWhite(T1,B1,Base1,Base2,I2).
+checkSCWhite([E1|T1], [A1|B1], Base1, Base2, I) :-  I2 is I+1, checkSCWhite(T1,B1,Base1,Base2,I2).
 
-searchSC([],[],_).
-searchSC([X|T], [0|B], X) :- searchSC(T,B,X).
-searchSC([_|T], [_|B], X) :- searchSC(T,B,X).
+searchSC(A,B,C,D) :- searchSC(A,B,C,D,0).
+searchSC([],[],_,_,_).
+searchSC([X|T], [0|B], X, I, C) :- I\=C, C2 is C+1, searchSC(T,B,X,I,C2).
+searchSC([_|T], [_|B], X, I, C) :- C2 is C+1, searchSC(T,B,X,I,C2).
 
 
 patternSCBlack([],[]).
-patternSCBlack([E1|T],[A1|B]) :- checkSCBlack(E1,A1,A1), patternSCBlack(T,B).
+patternSCBlack([E1|T],[A1|B]) :- checkSCBlack(E1,A1,E1,A1), patternSCBlack(T,B).
 
-checkSCBlack([],[],[]).
-checkSCBlack([E1,E2|T1], [0,_|B1], [_,E2|B1]) :- integer(A1),  checkSCBlack(T1,B1,Base1,Base2).
-checkSCBlack([_,_|T1], [_,_|B1],[_,_|B2]) :- checkSCBlack(T1,B1,B2).
-
-/*
-patternSC([],[]).
-patternSC([E1|T],[A1|B]) :- checkSC(E1,A1,A1), patternSC(T,B).
-
-checkSC([_],[_],[_]).
-checkSC([E1,E2|T1], [0,_|B1], [_,E2|B2]) :- checkSC([_|T1],[_|B1],[_|B2]).
-checkSC([_,_|T1], [_,_|B1], [_,_|B2]) :- checkSC([_|T1],[_|B1],[_|B2]).
-*/
+checkSCBlack([_],[_],_,_).
+checkSCBlack([E1,E2|T1], [A1,A2|B1], [E3,E4|T2], [_,E2|B2]) :- integer(A1), A1=0,  checkSCBlack([_|T1], [_|B1], [_|T2], [_|B2]).
+checkSCBlack([_,_|T1], [_,_|B1], [_,_|T1], [_,_|B2]) :- checkSCBlack([_|T1], [_|B1], [_|T2], [_|B2]).
 
 
 % Pattern sandwich. This does both the sanwich triple and the sandwich pair!
@@ -47,7 +49,7 @@ extractLineP1([],[]).
 extractLineP1([H|T],[A|B]) :- checkLineP1(H,A), extractLineP1(T,B).
 
 checkLineP1([_,_],[_,_]).
-checkLineP1([E1,E2,E1|T], [_,E2,A3|B]) :- checkLineP1([E2,_|T],[_,A3|B]).
+checkLineP1([E1,E2,E1|T], [_,E2,A3|B]) :- checkLineP1([E2,E1|T],[E2,A3|B]).
 checkLineP1([E1,E1,E1|T], [0,E1,0|B]) :- checkLineP1([E2,E3|T],[A2,A3|B]).
 checkLineP1([E1,E2,E3|T], [A1,A2,A3|B]) :- (E1\=E3; E1\=E2 ; E1\=E3), checkLineP1([E2,E3|T],[A2,A3|B]).
 
