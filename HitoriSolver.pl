@@ -3,13 +3,6 @@ inputFile('./hitori_unsolved.txt').
 
 :- include('Solver.pl').
 
-/********************* dummy solution algorithms -> fill your correct algorithm here */
-/* doSolve(SizeX,SizeY,Input,Output) */
-doSolve(5,_,_,[[1,'X',3,'X',5],[4,1,5,3,2],[2,'X',1,'X',3],[5,3,'X',1,4],[3,'X',4,5,'X']]):-!.
-doSolve(7,_,_,[['X',4,1,'X',6,5,'X'],[6,'X',3,5,'X',1,4],[5,3,'X',1,2,'X',6],['X',7,6,'X',1,2,5],[4,'X',7,2,'X',6,'X'],[1,6,2,7,5,4,3],[7,'X',5,'X',4,'X',2]]):-!.
-
-doSolve(_,_,Solution,Solution).
-
 /********************* writing the result */
 writeFullOutput(S, X, Y):- write(X), write('x'), write(Y), nl, writeOutput(S).
 

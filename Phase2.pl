@@ -1,14 +1,14 @@
 
 phase2(Rows, Result, Size) :-
-    append(Result, L),
-    L ins (0..Size),
     equality(Rows,Result),
     rule1(Result),
     rule2(Result),
-    maplist(label, Result).    
+    transpose(Result,Transposed),
+    rule1(Transposed),
+    rule2(Transposed).
 
 % Rule 1 - Checks if there are duplicates in a row or column
-rule1(M) :- rule1Check(M), transpose(M,T), rule1Check(T).
+rule1(M) :- rule1Check(M).
 
 rule1Check([]).
 rule1Check([H|T]) :- checkLine2(H), rule1Check(T).
@@ -16,11 +16,18 @@ rule1Check([H|T]) :- checkLine2(H), rule1Check(T).
 checkLine2(L) :- checkLine2(L,L).
 checkLine2(_,[]).
 checkLine2(L, [H|T]) :- H = 0, checkLine2(L,T).
-checkLine2(L, [H|T]) :- H \= 0, count(L,H,R), R=1, checkLine2(L,T).
+checkLine2(L, [H|T]) :- H \= 0, noDuplicates(L,H), checkLine2(L,T).
+
+
+noDuplicates(L,V) :- noDuplicates(L,V,0). 
+noDuplicates([],_,1).
+noDuplicates([],_,0).
+noDuplicates([V|T], X, R) :- V=X, A is R+1, A<2, noDuplicates(T,X,A).
+noDuplicates([V|T], X, R) :- V\=X , noDuplicates(T,X,R).
 
 
 % Rule 2 - Checks if there are adjacent blacks in a row or col
-rule2(M) :- rule2Check(M), transpose(M,T), rule2Check(T).
+rule2(M) :- rule2Check(M).
 
 rule2Check([]).
 rule2Check([H|T]) :- checkLine(H), rule2Check(T).
@@ -32,58 +39,9 @@ checkLine([I1,I2|T]) :- checkLine([I2|T]), not(blackPair(I1,I2)).
 blackPair(I1,I2) :- I1 == 0, I2 == 0.
 
 
+% Equality rule
+equality([],[]).
+equality([H1|T1], [H2|T2]) :- eq(H1,H2), equality(T1,T2).
 
-% Alternative solution?
-
-/*
-  def phase3(board: HBoard): HBoard =
-  {
-
-    var b = board
-    var backup = b
-
-
-    val dup = b.items.filter(i => i.state == "U")
-
-    for (i <- dup)
-    {
-      b = setCellBlack(b, i.x, i.y)
-      b = standardCycle(b)
-      b = phase2(b)
-      b = phase3(b)
-
-      if (isSolved(b))
-        return b
-
-      val rule_1 = rule1(b)
-      val rule_3 = rule3(b)
-
-      if (!rule_1 || !rule_3)
-      {
-        b = backup
-        b = setCellWhite(b, i.x, i.y)
-        backup = b
-      } else
-      {
-        b = backup
-      }
-
-    }
-
-    return b
-
-  }
-*/
-
-% SPM: Gjøre dette på en annen måte?
-
-
-solve()
-rule3(M,B) :- flatten(M, Flat), flatten(B, FlatBase), testBlacks(M,B).
-
-testBlacks([E1,E2|T],[A1,A2|B]) :- E1=0, E2=A2, testBlacks([E2|T],[A2|B]).
-testBlacks([E1,E2|T],[A1,A2|B]) :- E2=0, E1=A1, testBlacks([E2|T],[A2|B]).
-
-% row(B,I,R) :- nth1(I, B, R).
-
-% col(B,I,C) :- transpose(B, T), row(T,I,C).
+eq([],[]).
+eq([H1|T1], [H2|T2]) :- (H1=H2  ; H2=0 ), eq(T1,T2).
