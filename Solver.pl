@@ -20,8 +20,10 @@ mapMatrix([],[]).
 mapMatrix([H|T], [A|B]) :- mapRow(H,A), mapMatrix(T,B).
 
 mapRow([],[]).
-mapRow([0|T1],['X'|T2]) :- mapRow(T1,T2).
-mapRow([H|T1],[H|T2]) :- mapRow(T1,T2).
+mapRow([H|T1],['X'|T2]) :- integer(H), H=0, mapRow(T1,T2).
+mapRow([H|T1],[H|T2]) :- integer(H), mapRow(T1,T2).
+% For testing
+mapRow([H|T1],['U'|T2]) :- mapRow(T1,T2).
 
 % Solves the given puzzle with two phases
 solveMatrix(Size, _, Matrix, Result) :-
