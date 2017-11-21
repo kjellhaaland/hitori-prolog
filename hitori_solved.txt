@@ -1,11 +1,16 @@
 1
-CPU time = 1500 msec
+CPU time = 15 msec
 
-7x7
- X 4 1 X 6 5 X
- 6 X 3 5 X 1 4
- 5 3 X 1 2 X 6
- X 7 6 X 1 2 5
- 4 X 7 2 X 6 X
- 1 6 2 7 5 4 3
- 7 X 5 X 4 X 2
+12x12
+ 12 X 4 7 X 6 9 X 8 U U 3
+ U 9 X 5 4 11 X 2 X 6 1 X
+ 6 U 8 10 9 X 11 4 2 12 X 1
+ X 11 1 X 5 3 10 X 9 X 8 U
+ 1 7 X 2 U 5 U 6 X 8 X 4
+ U 2 7 X 3 X 6 X 12 9 4 10
+ 2 X 5 4 X 12 U 9 3 X 7 X
+ 10 4 X 12 6 X 3 8 X 1 2 5
+ X 8 6 X 2 4 5 X 10 3 X 12
+ 5 X 3 9 X 10 X 7 X 11 12 X
+ 8 6 12 X 7 U 1 U 5 X 10 9
+ X 12 U 3 X 9 X 10 X 5 U U

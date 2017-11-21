@@ -8,18 +8,21 @@ phase1(Rows, Result, Size) :-
     patternStandardCycle(Rows, Result), 
     patternStandardCycle(Rows, Result), 
     patternStandardCycle(Rows, Result), 
+    patternStandardCycle(Rows, Result),
     patternStandardCycle(Rows, Result), 
+    patternStandardCycle(Rows, Result),
+    patternStandardCycle(Rows, Result), 
+    patternStandardCycle(Rows, Result),
+    patternStandardCycle(Rows, Result), 
+    patternStandardCycle(Rows, Result),
     patternStandardCycle(Rows, Result).
 
 
-
-patternStandardCycle(M, EM) :- 
-    patternSCWhite(M, EM),
-    patternSCBlack(M,EM), 
-    transpose(M,T), transpose(EM,TEM), 
-    patternSCWhite(T,TEM),
-    patternSCBlack(T,TEM)
-    .   
+patternStandardCycle(M, S) :- 
+    rotateMatrix(M, M1), rotateMatrix(S,S1), patternSCWhite(M1,S1), patternSCBlack(M1,S1), 
+    rotateMatrix(M1, M2), rotateMatrix(S1,S2), patternSCWhite(M2,S2), patternSCBlack(M2,S2), 
+    rotateMatrix(M2, M3), rotateMatrix(S2,S3), patternSCWhite(M3,S3), patternSCBlack(M3,S3), 
+    rotateMatrix(M3, M4), rotateMatrix(S3,S4), patternSCWhite(M4,S4), patternSCBlack(M4,S4).   
 
 patternSCWhite([],[]).
 patternSCWhite([E1|T],[A1|B]) :- checkSCWhite(E1,A1,E1,A1,0), patternSCWhite(T,B).
@@ -38,8 +41,8 @@ patternSCBlack([],[]).
 patternSCBlack([E1|T],[A1|B]) :- checkSCBlack(E1,A1,E1,A1), patternSCBlack(T,B).
 
 checkSCBlack([_],[_],_,_).
-checkSCBlack([E1,E2|T1], [A1,A2|B1], [E3,E4|T2], [_,E2|B2]) :- integer(A1), A1=0,  checkSCBlack([_|T1], [_|B1], [_|T2], [_|B2]).
-checkSCBlack([_,_|T1], [_,_|B1], [_,_|T1], [_,_|B2]) :- checkSCBlack([_|T1], [_|B1], [_|T2], [_|B2]).
+checkSCBlack([E1,E2|T1], [A1,A2|B1], [E3,E4|T2], [_,E2|B2]) :- integer(A1), A1=0,checkSCBlack([E2|T1], [A2|B1], [E4|T2], [E2|B2]).
+checkSCBlack([_,E2|T1], [_,A2|B1], [_,E4|T1], [_,A4|B2]) :- checkSCBlack([E2|T1], [A2|B1], [E4|T2], [A4|B2]).
 
 
 % Pattern sandwich. This does both the sanwich triple and the sandwich pair!
@@ -67,7 +70,7 @@ checkDC([E1,E1|_], [E3,E4|_], [A1,A2|_], [E3,A4|_]).
 checkDC([E1,E2|_], [E1,E4|_], [A1,E2|_], [A3,A4|_]).
 checkDC([E1,E2|_], [E3,E3|_], [A1,E2|_], [A3,A4|_]).
 checkDC([E1,E2|_], [E3,E2|_], [A1,A2|_], [E3,A4|_]).
-checkDC([E1,E2|_], [E3,E4|_], [A1,A2|_], [A3,A4|_]) :- E1\=E2, E1\=E3, E3\=E4, E2\=E4.
+checkDC([E1,E2|_], [E3,E4|_], [A1,A2|_], [A3,A4|_]).
 
 
 % Pattern triple corner
@@ -97,3 +100,12 @@ checkQC([E1,E1|_], [E1,E1|_], [0,E1|_], [E1,0|_]). % Four eq. numbers in a corne
 checkQC([E1,E1|_], [E2,E2|_], [0,E1|_], [E2,0|_]). % Two eq. pairs in a corner horizontally.
 checkQC([E1,E2|_], [E1,E2|_], [0,E2|_], [E1,0|_]). % Two eq. pairs in a corner vertically.
 checkQC([E1,E2|_], [E3,E4|_], [A1,A2|_], [A3,A4|_]).
+
+
+
+
+
+% Counts the occuriencies of the element X in the list.
+count([],_,0).
+count([X|T],X,Y):- count(T,X,Z), Y is 1+Z.
+count([X1|T],X,Z):- X1\=X,count(T,X,Z).

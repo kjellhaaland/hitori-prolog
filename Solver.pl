@@ -30,7 +30,7 @@ solveMatrix(Size, _, Matrix, Result) :-
     statistics(runtime, _),
     createBlankMatrix(Matrix,BlankMatrix),
     phase1(Matrix, BlankMatrix, Size),
-    phase2(Matrix, BlankMatrix, Size),
+    %phase2(Matrix, BlankMatrix, Size),
     statistics(runtime, [_,T]),
     write('CPU time = '), write(T), write(' msec'), nl, nl,
     mapMatrix(BlankMatrix, Result). 
