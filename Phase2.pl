@@ -2,10 +2,11 @@
 phase2(Rows, Result, Size) :-
     equality(Rows,Result),
     rule1(Result),
-    rule2(Result),
+    rule2(Result), 
     transpose(Result,Transposed),
     rule1(Transposed),
     rule2(Transposed).
+
 
 % Rule 1 - Checks if there are duplicates in a row or column
 rule1(M) :- rule1Check(M).
@@ -45,3 +46,6 @@ equality([H1|T1], [H2|T2]) :- eq(H1,H2), equality(T1,T2).
 
 eq([],[]).
 eq([H1|T1], [H2|T2]) :- (H1=H2  ; H2=0 ), eq(T1,T2).
+
+
+

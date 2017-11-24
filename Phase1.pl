@@ -5,24 +5,20 @@ phase1(Rows, Result, Size) :-
     patternQuadCorner(Rows,Result),
     patternTripleCorner(Rows, Result),
     patternDoubleCorner(Rows, Result),
-    patternStandardCycle(Rows, Result), 
-    patternStandardCycle(Rows, Result), 
-    patternStandardCycle(Rows, Result), 
-    patternStandardCycle(Rows, Result),
-    patternStandardCycle(Rows, Result), 
-    patternStandardCycle(Rows, Result),
-    patternStandardCycle(Rows, Result), 
-    patternStandardCycle(Rows, Result),
-    patternStandardCycle(Rows, Result), 
-    patternStandardCycle(Rows, Result),
     patternStandardCycle(Rows, Result).
 
 
-patternStandardCycle(M, S) :- 
-    rotateMatrix(M, M1), rotateMatrix(S,S1), patternSCWhite(M1,S1), patternSCBlack(M1,S1), 
+patternStandardCycle(M,S) :- countUnsolvedInMatrix(S,C1), patternStandardCycle(M,S,C1,999999).
+patternStandardCycle(M,S,A,A).
+patternStandardCycle(M, S, C1, C2) :- C1\=C2, standardCycle(M,S),
+    countUnsolvedInMatrix(S,C3), patternStandardCycle(M,S,C2,C3).
+
+
+standardCycle(M,S) :- 
+    rotateMatrix(M, M1), rotateMatrix(S,S1), patternSCWhite(M1,S1), patternSCBlack(M1,S1),
     rotateMatrix(M1, M2), rotateMatrix(S1,S2), patternSCWhite(M2,S2), patternSCBlack(M2,S2), 
     rotateMatrix(M2, M3), rotateMatrix(S2,S3), patternSCWhite(M3,S3), patternSCBlack(M3,S3), 
-    rotateMatrix(M3, M4), rotateMatrix(S3,S4), patternSCWhite(M4,S4), patternSCBlack(M4,S4).   
+    rotateMatrix(M3, M4), rotateMatrix(S3,S4), patternSCWhite(M4,S4), patternSCBlack(M4,S4).
 
 patternSCWhite([],[]).
 patternSCWhite([E1|T],[A1|B]) :- checkSCWhite(E1,A1,E1,A1,0), patternSCWhite(T,B).
@@ -109,3 +105,17 @@ checkQC([E1,E2|_], [E3,E4|_], [A1,A2|_], [A3,A4|_]).
 count([],_,0).
 count([X|T],X,Y):- count(T,X,Z), Y is 1+Z.
 count([X1|T],X,Z):- X1\=X,count(T,X,Z).
+
+% Counts the occuriencies of the element X in the list.
+countExcludeBlacks([],_,0).
+countExcludeBlacks([X|T],X,Y):- integer(X), countExcludeBlacks(T,X,Z), Y is 1+Z.
+countExcludeBlacks([X1|T],X,Z):- X1\=X,countExcludeBlacks(T,X,Z).
+
+% Counts the occuriencies of the element X in the list.
+countUnsolvedInMatrix(M,Y) :- flatten(M, Flat), countUnsolved(Flat,Y).
+
+countUnsolved([],0).
+countUnsolved([X|T], Y):- integer(X), X>=0, countUnsolved(T,Y).
+countUnsolved([X|T], Y):- countUnsolved(T,Z), Y is 1+Z.
+
+%[ [1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9] ]
