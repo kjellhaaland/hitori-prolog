@@ -1,5 +1,5 @@
 1
-CPU time = 32 msec
+CPU time = 28 msec
 
 20x20
  X 15 X 11 5 3 X 1 X 13 17 X 18 U 7 X 16 8 U U
