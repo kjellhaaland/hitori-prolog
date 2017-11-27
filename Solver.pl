@@ -3,7 +3,7 @@
 
 % Include the phases
 :- include('Phase2.pl').
-:- include('Phase1.pl').
+%:- include('Phase1.pl').
 :- include('Common.pl').
 
 
@@ -29,8 +29,8 @@ mapRow([H|T1],['U'|T2]) :- mapRow(T1,T2).
 solveMatrix(Size, _, Matrix, Result) :-
     statistics(runtime, _),
     createBlankMatrix(Matrix,BlankMatrix),
-    phase1(Matrix, BlankMatrix, Size),
-    %phase2(Matrix, BlankMatrix, Size),
+    %phase1(Matrix, BlankMatrix, Size),
+    phase2(Matrix, BlankMatrix, Size),
     statistics(runtime, [_,T]),
     write('CPU time = '), write(T), write(' msec'), nl, nl,
     mapMatrix(BlankMatrix, Result). 
