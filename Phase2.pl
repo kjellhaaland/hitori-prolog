@@ -50,8 +50,9 @@ rule3(M) :-
     nonBlacks(FM,NonBlacks),
     same_length(R, NonBlacks), write('Finished'), nl, write(M), !.
 
-flood(Matrix,[V,X,Y],Visited,Visited) :- V=0.
-flood(Matrix,[V,X,Y],Visited,Visited) :- member([V,X,Y], Visited).
+
+flood(Matrix,[V,X,Y],Visited,Visited) :- V=0,!.
+flood(Matrix,[V,X,Y],Visited,Visited) :- member([V,X,Y], Visited),!.
 flood(Matrix,[V,X,Y],Visited,R0) :-
     V \=0, append(Visited,[[V,X,Y]], R1),
     Xleft is X-1, elementAt(Matrix,Xleft,Y,Eleft),
@@ -61,10 +62,10 @@ flood(Matrix,[V,X,Y],Visited,R0) :-
     flood(Matrix,Eleft,R1,R2),
     flood(Matrix,Eright,R2,R3),
     flood(Matrix,Edown,R3,R4),
-    flood(Matrix,Eup,R4,R5),
-    list_to_set(R5,R0).
+    flood(Matrix,Eup,R4,R5),!, 
+    list_to_set(R5,R0), !.
 
-    
+
     
 
 firstNonBlack([H|_],V) :- exclude(ib,H, [V|_]).
@@ -78,11 +79,11 @@ elementAt(M,X,Y,E) :- nth0(Y, M, Row), nth0(X,Row,E).
 elementAt(M,X,Y,[0,0,0]).
 
 prepareForFlood(A,B) :- prepareForFlood(A,B,0).
-prepareForFlood([],[],_).
+prepareForFlood([],[],V).
 prepareForFlood([H|T], [A|B],Y) :- prepareRow(H,A,0,Y), Y2 is Y+1, prepareForFlood(T,B,Y2).
 
 prepareRow([],[],_,_).
-prepareRow([V|T1],[[V,Y,X]|T2],Y,X) :- X2 is X+1, prepareRow(T1,T2,X2,Y).
+prepareRow([V|T1],[[V,X,Y]|T2],X,Y) :- X2 is X+1, prepareRow(T1,T2,X2,Y).
 
 
 
