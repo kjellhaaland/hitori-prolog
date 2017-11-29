@@ -3,7 +3,7 @@
 
 % Include the phases
 :- include('Phase2.pl').
-%:- include('Phase1.pl').
+:- include('Phase1.pl').
 :- include('Common.pl').
 
 
