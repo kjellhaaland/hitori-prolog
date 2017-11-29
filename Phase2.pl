@@ -98,7 +98,6 @@ eq(H1,H2,[E1|T1],[E2|T2],Size) :- E2=0,
     list2matrix(A1,Size,R1), list2matrix(A2,Size,R2),
     chainReactions(R1,R2).
 
-
 chainReactions(M,S) :- 
     rotateMatrix(M, M1), rotateMatrix(S,S1), 
     patternStandardCycleBlack(M1,S1),!,
@@ -115,30 +114,32 @@ chainReactions(M,S) :-
 patternStandardCycleWhite(BM,SM) :- patternStandardCycleWhite(BM,SM,BM,SM,0).
 patternStandardCycleWhite(_,_,[],[],_).
 patternStandardCycleWhite(BM,SM,[E1|T],[A1|B],Y) :- checkStandardCycleWhite(BM,SM,E1,A1,0,Y), Y2 is Y+1, patternStandardCycleWhite(BM,SM,T,B,Y2).
-patternStandardCycleWhite(BM,SM,[E1|T],[A1|B],Y) :- not(integer(A1)), Y2 is Y+1, patternStandardCycleWhite(BM,SM,T,B,Y2).
 
 checkStandardCycleWhite(_,_,[],[],_,_).
-checkStandardCycleWhite(BM,SM,[_|T],[A|B],X,Y) :- integer(A), A=0, X2 is X+1, checkStandardCycleWhite(BM,SM,T,B,X2,Y).
+checkStandardCycleWhite(BM,SM,[_|T],[A|B],X,Y) :- not(integer(A)),!, X2 is X+1, checkStandardCycleWhite(BM,SM,T,B,X2,Y).
+%checkStandardCycleWhite(BM,SM,[H|T],[A|B],X,Y) :- isSolved(H),!, X2 is X+1, checkStandardCycleWhite(BM,SM,T,B,X2,Y).
+checkStandardCycleWhite(BM,SM,[_|T],[A|B],X,Y) :- integer(A), A=0,!, X2 is X+1, checkStandardCycleWhite(BM,SM,T,B,X2,Y).
 checkStandardCycleWhite(BM,SM,[H|T],[A|B],X,Y) :- integer(A), A=H, 
     row(BM,Y,BMRow), row(SM,Y,SMRow), searchSCWhite(BMRow,SMRow,[A,X]),
     col(BM,X,BMCol), col(SM,X,SMCol), searchSCWhite(BMCol,SMCol,[A,Y]), 
     X2 is X+1, checkStandardCycleWhite(BM,SM,T,B,X2,Y).
-checkStandardCycleWhite(BM,SM,[_|T],[A|B],X,Y) :-  not(integer(A)), X2 is X+1, checkStandardCycleWhite(BM,SM,T,B,X2,Y).
+
 
 searchSCWhite(BL,SL,I) :- searchSCWhite(BL,SL,I,0).
 searchSCWhite([],[],_,_).
-searchSCWhite([H|T],[A|B],[V,I],I2) :- H=V, I2\=I, A=0, I3 is I2+1, searchSCWhite(T,B,[V,I],I3).
-searchSCWhite([H|T],[A|B],[V,I],I2) :- H=V, I2=I, I3 is I2+1, searchSCWhite(T,B,[V,I],I3).
-searchSCWhite([H|T],[_|B],[V,I],I2) :- H\=V, I3 is I2+1, searchSCWhite(T,B,[V,I],I3).
+searchSCWhite([H|T],[A|B],[V,I],I2) :- H=V, I2\=I, A=0,!, I3 is I2+1, searchSCWhite(T,B,[V,I],I3).
+searchSCWhite([H|T],[A|B],[V,I],I2) :- H=V, I2=I,!,I3 is I2+1, searchSCWhite(T,B,[V,I],I3).
+searchSCWhite([H|T],[_|B],[V,I],I2) :- H\=V,!, I3 is I2+1, searchSCWhite(T,B,[V,I],I3).
 
 
 patternStandardCycleBlack([],[]).
 patternStandardCycleBlack([E1|T],[A1|B]) :- checkStandardCycleBlack(E1,A1), patternStandardCycleBlack(T,B).
 
 checkStandardCycleBlack([_],[_]).
-checkStandardCycleBlack([E1,E2|T1], [A1,A2|B1]) :- integer(A1), A1=0, A2=E2, checkStandardCycleBlack([E2|T1], [A2|B1]).
-checkStandardCycleBlack([E1,E2|T1], [A1,A2|B1]) :- integer(A1), A1\=0, checkStandardCycleBlack([E2|T1], [A2|B1]).
-checkStandardCycleBlack([E1,E2|T1], [A1,A2|B1]) :- not(integer(A1)), checkStandardCycleBlack([E2|T1], [A2|B1]).
+checkStandardCycleBlack([E1,E2|T1], [A1,A2|B1]) :- not(integer(A1)),!, checkStandardCycleBlack([E2|T1], [A2|B1]).
+checkStandardCycleBlack([E1,E2|T1], [A1,A2|B1]) :- A1=0, A2=E2,!, checkStandardCycleBlack([E2|T1], [A2|B1]).
+checkStandardCycleBlack([E1,E2|T1], [A1,A2|B1]) :- A1\=0,!, checkStandardCycleBlack([E2|T1], [A2|B1]).
+
 
 
 length_(Length, List) :- length(List, Length).
@@ -148,3 +149,6 @@ list2matrix(List, RowSize, Matrix) :-
     length(Matrix, HowManyRows),
     maplist(length_(RowSize), Matrix),
     append(Matrix, List).
+
+
+isSolved(V) :- V=0.
