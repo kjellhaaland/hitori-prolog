@@ -40,7 +40,7 @@ mapRow([H|T1],['U'|T2]) :- mapRow(T1,T2).
 solveMatrix(Size, _, Matrix, Result) :-
     statistics(runtime, _),
     createBlankMatrix(Matrix,BlankMatrix),
-    phase1(Matrix, BlankMatrix, Size),
+    %phase1(Matrix, BlankMatrix, Size),
     prep(Matrix, BlankMatrix, PreparedMatrix),
     phase2(PreparedMatrix, BlankMatrix, Size),
     statistics(runtime, [_,T]),

@@ -115,7 +115,7 @@ countExcludeBlacks([X1|T],X,Z):- X1\=X,countExcludeBlacks(T,X,Z).
 countUnsolvedInMatrix(M,Y) :- flatten(M, Flat), countUnsolved(Flat,Y).
 
 countUnsolved([],0).
-countUnsolved([X|T], Y):- integer(X), X>=0, countUnsolved(T,Y).
-countUnsolved([X|T], Y):- countUnsolved(T,Z), Y is 1+Z.
+countUnsolved([X|T], Y):- isUnknown(X), !,countUnsolved(T,Z), Y is 1+Z.
+countUnsolved([X|T], Y):- countUnsolved(T,Y).
 
 %[ [1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9] ]

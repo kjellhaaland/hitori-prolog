@@ -16,6 +16,7 @@ rule1Check([H|T]) :- checkLine2(H), rule1Check(T).
 
 checkLine2(L) :- checkLine2(L,L).
 checkLine2(_,[]).
+checkLine2(L, [H|T]) :- isUnknown(H),!, checkLine2(L,T).
 checkLine2(L, [H|T]) :- H = 0, checkLine2(L,T).
 checkLine2(L, [H|T]) :- H \= 0, noDuplicates(L,H), checkLine2(L,T).
 
@@ -23,6 +24,7 @@ checkLine2(L, [H|T]) :- H \= 0, noDuplicates(L,H), checkLine2(L,T).
 noDuplicates(L,V) :- noDuplicates(L,V,0). 
 noDuplicates([],_,1).
 noDuplicates([],_,0).
+noDuplicates([V|T], X, R) :- isUnknown(V), noDuplicates(T,X,R).
 noDuplicates([V|T], X, R) :- V=X, A is R+1, A<2, noDuplicates(T,X,A).
 noDuplicates([V|T], X, R) :- V\=X , noDuplicates(T,X,R).
 
@@ -92,12 +94,25 @@ eq(_,_,[0|_],[_|_],_) :- !.
 eq(H1,H2,[E1|T1],[E2|T2],Size) :- E2=E1,
     append(H1,[E1|T1],A1), append(H2,[E2|T2],A2), 
     list2matrix(A1,Size,R1), list2matrix(A2,Size,R2),
-    chainReactions(R1,R2).
+    doChainReactions(R1,R2).
 
 eq(H1,H2,[E1|T1],[E2|T2],Size) :- E2=0,
     append(H1,[E1|T1],A1), append(H2,[E2|T2],A2), 
     list2matrix(A1,Size,R1), list2matrix(A2,Size,R2),
-    chainReactions(R1,R2).
+    doChainReactions(R1,R2).
+
+doChainReactions(M,S) :- doChainReactions(M,S,99999,0).
+
+doChainReactions(M, S, CBefore, CAfter) :- 
+    CAfter<CBefore,
+    countUnsolvedInMatrix(S,C1),
+    chainReactions(M,S),
+    countUnsolvedInMatrix(S,C2), !,rule1(S),rule2(S),
+    prep(M,S,M2), 
+    doChainReactions(M2,S,C1,C2).
+
+doChainReactions(M,S,CBefore,CAfter) :- CAfter>=CBefore.
+doChainReactions(_,_,_,_) :- false.
 
 chainReactions(M,S) :-
     rotateMatrix(M, M1), rotateMatrix(S,S1), 
@@ -110,7 +125,6 @@ chainReactions(M,S) :-
     patternStandardCycleBlack(M4,S4),
     patternStandardCycleWhite(M4,S4).
     
-
     
 patternStandardCycleWhite(BM,SM) :- patternStandardCycleWhite(BM,SM,BM,SM,0).
 patternStandardCycleWhite(_,_,[],[],_).
@@ -138,9 +152,9 @@ patternStandardCycleBlack([],[]).
 patternStandardCycleBlack([E1|T],[A1|B]) :- checkStandardCycleBlack(E1,A1), patternStandardCycleBlack(T,B).
 
 checkStandardCycleBlack([_],[_]).
-checkStandardCycleBlack([E1,E2|T1], [A1,A2|B1]) :- ( isSolved(E1) ; isUnknown(A1) ), !, checkStandardCycleBlack([E2|T1], [A2|B1]).
-checkStandardCycleBlack([E1,E2|T1], [A1,A2|B1]) :- A1=0, (A2=E2 ; E2=0), !, checkStandardCycleBlack([E2|T1], [A2|B1]).
-checkStandardCycleBlack([E1,E2|T1], [A1,A2|B1]) :- A1\=0,!, checkStandardCycleBlack([E2|T1], [A2|B1]).
+checkStandardCycleBlack([E1,E2|T1], [A1,A2|B1]) :- ( isSolved(E1) ; isSolved(E2) ; isUnknown(A1) ), !, checkStandardCycleBlack([E2|T1], [A2|B1]).
+checkStandardCycleBlack([E1,E2|T1], [A1,A2|B1]) :- A1=0, A2=E2, !, checkStandardCycleBlack([E2|T1], [A2|B1]).
+checkStandardCycleBlack([E1,E2|T1], [A1,A2|B1]) :- A1\=0, !, checkStandardCycleBlack([E2|T1], [A2|B1]).
 
 
 
