@@ -49,7 +49,6 @@ rule3(M) :-
     nonBlacks(FM,NonBlacks),
     same_length(R, NonBlacks),!.
 
-
 flood(Matrix,[V,X,Y],Visited,Visited) :- V=0,!.
 flood(Matrix,[V,X,Y],Visited,Visited) :- member([V,X,Y], Visited),!.
 flood(Matrix,[V,X,Y],Visited,R0) :-
@@ -123,7 +122,8 @@ chainReactions(M,S) :-
     patternStandardCycleBlack(M3,S3),!, 
     rotateMatrix(M3, M4), rotateMatrix(S3,S4),
     patternStandardCycleBlack(M4,S4),
-    patternStandardCycleWhite(M4,S4).
+    patternStandardCycleWhite(M4,S4),!,
+    patternUnique(M4,S4).
     
     
 patternStandardCycleWhite(BM,SM) :- patternStandardCycleWhite(BM,SM,BM,SM,0).

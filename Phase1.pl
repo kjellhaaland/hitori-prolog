@@ -5,28 +5,23 @@ phase1(Rows, Result, Size) :-
     patternQuadCorner(Rows,Result),
     patternTripleCorner(Rows, Result),
     patternDoubleCorner(Rows, Result),
-    patternStandardCycle(Rows, Result).
-    %patternUnique(Rows,Result).
+    patternStandardCycle(Rows, Result)
+    , patternUnique(Rows,Result)
+    .
 
 
 patternUnique(BM,SM) :- patternUnique(BM,SM,BM,SM,0).
 patternUnique(_,_,[],[],_).
-patternUnique(BM,SM,[E1|T],[A1|B],Y) :- uniqueness(BM,SM,E1,A1,0,Y), Y2 is Y+1, patternUnique(BM,SM,T,B,Y2).
+patternUnique(BM,SM,[H1|T],[A1|B],Y) :- uniqueness(BM,SM,H1,A1,0,Y), Y2 is Y+1, patternUnique(BM,SM,T,B,Y2).
 
 uniqueness(_,_,[],[],_,_).
 uniqueness(BM,SM, [H|T], [A|B], X, Y) :- isUnknown(A), 
-    row(BM,Y,BMRow), row(SM,Y,SMRow), uniquenessSearch(BMRow,SMRow,[A,X]),
-    col(BM,X,BMCol), col(SM,X,SMCol), uniquenessSearch(BMCol,SMCol,[A,X]),
+    row(BM,Y,BMRow), row(SM,Y,SMRow), countUnsolvedDuplicates(BMRow, SMRow,H,CRow), CRow=1,
+    col(BM,X,BMCol), col(SM,X,SMCol), countUnsolvedDuplicates(BMCol, SMCol,H,CCol), CCol=1,!, A=H,
     X2 is X+1, uniqueness(BM,SM,T,B,X2,Y).
-uniqueness(BM,SM, [H|T], [A|B], X, Y) :- X2 is X+1, uniqueness(BM,SM,T,B,X2,Y).
 
+uniqueness(BM,SM, [_|T], [_|B], X, Y) :- X2 is X+1, uniqueness(BM,SM,T,B,X2,Y).
 
-uniquenessSearch(BL,SL,I) :- uniquenessSearch(BL,SL,I,0).
-uniquenessSearch([],[],_,_).
-uniquenessSearch([H|T],[A|B],[V,I],I2) :- I2=I,!, I3 is I2+1, uniquenessSearch(T,B,[V,I],I3).
-uniquenessSearch([H|T],[A|B],[V,I],I2) :- H=V, A=0, !, I3 is I2+1, uniquenessSearch(T,B,[V,I],I3).
-uniquenessSearch([H|T],[A|B],[V,I],I2) :- H=V, !,false.
-uniquenessSearch([H|T],[A|B],[V,I],I2) :- I3 is I2+1, uniquenessSearch(T,B,[V,I],I3).
 
 patternStandardCycle(M,S) :- countUnsolvedInMatrix(S,C1), patternStandardCycle(M,S,C1,999999).
 patternStandardCycle(M,S,A,A).
@@ -137,5 +132,9 @@ countUnsolvedInMatrix(M,Y) :- flatten(M, Flat), countUnsolved(Flat,Y).
 countUnsolved([],0).
 countUnsolved([X|T], Y):- isUnknown(X), !,countUnsolved(T,Z), Y is 1+Z.
 countUnsolved([X|T], Y):- countUnsolved(T,Y).
+
+countUnsolvedDuplicates([],[],_,0).
+countUnsolvedDuplicates([X|T],[A|B], V, Y):- isUnknown(A), X=V, !, countUnsolvedDuplicates(T,B,V,Z), Y is 1+Z.
+countUnsolvedDuplicates([X|T],[A|B], V, Y):- countUnsolvedDuplicates(T,B,V,Y).
 
 %[ [1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9] ]
