@@ -158,6 +158,7 @@ checkStandardCycleBlack([E1,E2|T1], [A1,A2|B1]) :- A1\=0, !, checkStandardCycleB
 
 
 
+
 length_(Length, List) :- length(List, Length).
 list2matrix(List, RowSize, Matrix) :-
     length(List, L),

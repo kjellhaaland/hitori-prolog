@@ -2,9 +2,9 @@
 :- use_module(library(clpfd)).
 
 % Include the phases
-:- include('Phase2.pl').
-:- include('Phase1.pl').
-:- include('Common.pl').
+:- include('Phase2').
+:- include('Phase1').
+:- include('Common').
 
 
 % Creates an empty matrix with the same dimensions as the given matrix
@@ -38,11 +38,8 @@ mapRow([H|T1],['U'|T2]) :- mapRow(T1,T2).
 
 % Solves the given puzzle with two phases
 solveMatrix(Size, _, Matrix, Result) :-
-    statistics(runtime, _),
     createBlankMatrix(Matrix,BlankMatrix),
-    %phase1(Matrix, BlankMatrix, Size),
-    prep(Matrix, BlankMatrix, PreparedMatrix),
+    phase1(Matrix, BlankMatrix, Size),
+    prep(Matrix, BlankMatrix, PreparedMatrix),!,
     phase2(PreparedMatrix, BlankMatrix, Size),
-    statistics(runtime, [_,T]),
-    write('CPU time = '), write(T), write(' msec'), nl, nl,
     mapMatrix(BlankMatrix, Result). 
