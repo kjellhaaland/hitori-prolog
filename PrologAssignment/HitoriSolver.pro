@@ -1,7 +1,7 @@
 outputFile('./hitori_solved.txt').
 inputFile('./hitori_unsolved.txt').
 
-:- include('Solver.pl').
+:- include('Solver').
 
 /********************* writing the result */
 writeFullOutput(S, X, Y):- write(X), write('x'), write(Y), nl, writeOutput(S).
@@ -38,6 +38,6 @@ run:- told, seen. /* close the files */
 
 solveProblems(0).
 solveProblems(N):- N>0, readProblem(X, Y, I), solveMatrix(X, Y, I, S), writeFullOutput(S, X, Y), !, N1 is N-1, solveProblems(N1).
-
-:- nl,nl,write(' try running "?- run."'), nl,nl,nl.
-:- run.
+solveProblems(_):- write('no solutions'). 
+%:- nl,nl,write(' try running "?- run."'), nl,nl,nl.
+%:- run.
