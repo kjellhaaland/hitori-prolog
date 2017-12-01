@@ -1,0 +1,1 @@
+During bamboo tests, this file will be overwritten (hopefully)
