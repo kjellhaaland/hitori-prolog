@@ -64,6 +64,7 @@ flood(Matrix,[V,X,Y],Visited,R0) :-
     flood(Matrix,Eup,R4,R5),!, 
     list_to_set(R5,R0), !.
 
+
 firstNonBlack([H|_],V) :- exclude(ib,H, [V|_]).
 ib([V,X,Y]) :- V==0.
 
@@ -89,30 +90,29 @@ equality(A,B,Size) :- equality(A,B,[],[],Size).
 equality([],[],_,_,_).
 equality([H1|T1], [H2|T2], A, B, Size) :- eq(A,B,[H1|T1],[H2|T2],Size), append(A,[H1],A2), append(B,[H2],B2), equality(T1,T2,A2,B2,Size).
 
+
 eq(_,_,[0|_],[_|_],_) :- !.
 
 eq(H1,H2,[E1|T1],[E2|T2],Size) :- E2=E1,
     append(H1,[E1|T1],A1), append(H2,[E2|T2],A2), 
     list2matrix(A1,Size,R1), list2matrix(A2,Size,R2),
-    doChainReactions(R1,R2).
+    chainReactions(R1,R2).
 
 eq(H1,H2,[E1|T1],[E2|T2],Size) :- E2=0,
     append(H1,[E1|T1],A1), append(H2,[E2|T2],A2), 
     list2matrix(A1,Size,R1), list2matrix(A2,Size,R2),
-    doChainReactions(R1,R2).
+    chainReactions(R1,R2).
 
 doChainReactions(M,S) :- doChainReactions(M,S,99999,0).
-
 doChainReactions(M, S, CBefore, CAfter) :- 
     CAfter<CBefore,
     countUnsolvedInMatrix(S,C1),
-    chainReactions(M,S),
-    countUnsolvedInMatrix(S,C2), !,rule1(S),rule2(S),
-    prep(M,S,M2), 
-    doChainReactions(M2,S,C1,C2).
+    chainReactions(M,S),!,
+    countUnsolvedInMatrix(S,C2),
+    prep(M,S,M2),
+    doChainReactions(M2,S,C1,C2),!.
 
 doChainReactions(M,S,CBefore,CAfter) :- CAfter>=CBefore.
-doChainReactions(_,_,_,_) :- false.
 
 chainReactions(M,S) :-
     rotateMatrix(M, M1), rotateMatrix(S,S1), 
@@ -170,4 +170,4 @@ list2matrix(List, RowSize, Matrix) :-
 isSolved(V) :- V=0.
 
 isUnknown(V) :- integer(V), !, false.
-isUnknown(V).
+isUnknown(_).
