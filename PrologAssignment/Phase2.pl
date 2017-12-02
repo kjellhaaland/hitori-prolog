@@ -127,12 +127,12 @@ fill(_,_,[0|_],[_|_],_) :- !.
 fill(H1,H2,[E1|T1],[E2|T2],Size) :- E2=E1,              % Set the cell to its original value
     append(H1,[E1|T1],A1), append(H2,[E2|T2],A2),       % Combine the head and tail of the list (to create the original list with the change)
     list2matrix(A1,Size,R1), list2matrix(A2,Size,R2),   % Transform the lists into matrices again
-    chainReactions(R1,R2).                              % Perform chain reactions
+    doChainReactions(R1,R2).                              % Perform chain reactions
 
 fill(H1,H2,[E1|T1],[E2|T2],Size) :- E2=0,               % Set the cell to black (painted)
     append(H1,[E1|T1],A1), append(H2,[E2|T2],A2),       % Combine the head and tail of the list (to create the original list with the change)
     list2matrix(A1,Size,R1), list2matrix(A2,Size,R2),   % Transform the lists into matrices again
-    chainReactions(R1,R2).                              % Perform chain reactions
+    doChainReactions(R1,R2).                              % Perform chain reactions
 
 % Length of the list
 length_(Length, List) :- length(List, Length).
