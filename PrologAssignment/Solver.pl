@@ -44,11 +44,8 @@ mapRow([_|T1],['U'|T2]) :- mapRow(T1,T2).
  * Phase2 is based on brute-force combined with chain reactions
  */ 
 solveMatrix(Size, _, BaseMatrix, ResultMatrix) :-
-    statistics(runtime, _),    
     createBlankMatrix(BaseMatrix,SolutionMatrix),          % Creates a blank matrix with the same dimensions as the BaseMatrix
     phase1(BaseMatrix, SolutionMatrix, Size),              % Fills some of the cells in the SolutionMatrix based on known patterns
     prep(BaseMatrix, SolutionMatrix, PreparedMatrix),!,    % Prepares the matrix for phase2 by replacing all solved cells with 0. (They does not need to be checked again because they are already solved)
     phase2(PreparedMatrix, SolutionMatrix, Size),          % Fills the remaining unbound cells by brute-force and chain reactions. Will fail if if no solution is found.
-    statistics(runtime, [_,TA]), nl,
-    write('CPU time = '), write(TA), write(' msec'), nl,    
     mapMatrix(SolutionMatrix, ResultMatrix).               % Copy the solution to the resulting matrix (So that it is in a printable format)
