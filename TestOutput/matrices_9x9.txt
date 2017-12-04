@@ -1,6 +1,4 @@
 4
-
-CPU time = 468 msec
 9x9
  X 2 3 X 9 X 5 4 X
  3 5 8 7 1 6 9 X 4
@@ -11,8 +9,6 @@ CPU time = 468 msec
  9 7 2 8 X 4 6 5 X
  1 6 X 3 4 X 8 7 9
  X 4 7 X 5 1 X 3 X
-
-CPU time = 61 msec
 9x9
  6 7 X 8 5 X 2 9 X
  2 X 8 6 4 1 X 7 5
@@ -23,8 +19,6 @@ CPU time = 61 msec
  7 2 X 5 X 6 X 4 8
  4 X 7 3 6 9 5 X 2
  X 5 9 X 3 X 8 2 X
-
-CPU time = 504 msec
 9x9
  4 6 7 3 X 5 1 8 X
  9 X 8 X 1 X 5 2 6
@@ -35,8 +29,6 @@ CPU time = 504 msec
  X 1 X 5 4 6 3 7 X
  3 X 6 1 2 X 7 5 9
  5 9 2 8 X 1 4 X 7
-
-CPU time = 2449 msec
 9x9
  X 6 9 X 2 8 1 5 7
  5 3 7 6 X 4 2 X 8
