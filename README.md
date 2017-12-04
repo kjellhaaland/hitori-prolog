@@ -1,20 +1,17 @@
 # hitori-prolog
-Hitori solver written in Prolog
+Simple, fast and reliable Hitori-Sovler written in SWI-Prolog. 
 
-
+## What is this magic?
+The solver is written as a part of a course in Computer Science at the University of Agder. The solver is written with the goal to be logical, efficient and correct. 
 
 ## How to run the solver?
-There are several ways to run the solver. If you want to solve a single hitori-board, you can do the following:
+You need to have SWI-Prolog installed on your machine in order to run the solver.
 
-```prolog
-% Open a terminal. (You need to have SWI-Prolog installed)
+1. Clone this repository. 
+2. Open a terminal and navigate to the cloned folder
+3. Type ```swipl```
+4. Copy your puzzles into the hitori_unsolved.txt file. Be sure to follow the same format as the example data. 
+5. Load the solver by typing ```['./PrologAssignment/HitoriSolver.pro'].```
+6. The solution to the inserted puzzles will be printed to the hitori_solved.txt file.
 
-% Type *swipl* and press enter
 
-% Load the solver by typing the following: 
-['Solver'].
-
-% Run the solver by typing the following: 
-solveMatrix(5,5,[[1,2,5,4,3],[4,5,4,1,1],[1,1,3,1,4],[3,4,1,2,5],[3,1,4,1,2]], X).
-
-```
